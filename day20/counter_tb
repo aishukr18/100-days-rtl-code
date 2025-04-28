@@ -1,0 +1,43 @@
+module counter_tb();
+    reg clk, rst, load, mode;
+    reg [3:0] din;
+    wire [3:0] dout;
+
+    counter uut(clk, rst, load, mode, din, dout);
+
+    initial begin
+        clk = 0;
+    end
+
+    always #10 clk = ~clk;
+
+    task reset;
+    begin
+        @(posedge clk);
+        rst = 1'b1;
+        @(posedge clk);
+        rst = 1'b0;
+    end
+    endtask
+
+    task load_in(input [3:0] i); // Loadable counter
+    begin
+        @(posedge clk);
+        load = 1'b1;
+        din = i;
+        @(posedge clk);
+        load = 1'b0;
+    end
+    endtask
+
+    initial begin
+        reset;
+        load_in(4'b0001);
+        mode = 1'b1; // Even counter
+        #200;
+        mode = 1'b0; // Odd counter
+        #140;
+        $finish;
+    end
+
+endmodule
