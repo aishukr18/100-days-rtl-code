@@ -1,4 +1,4 @@
-module seven_segment_decoder (
+module seven_segment (
     input  [3:0] bin_in,
     output reg [6:0] seg_out  // a to g
 );
